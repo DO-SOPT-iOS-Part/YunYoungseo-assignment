@@ -11,8 +11,8 @@ import Then
 
 class DetailViewController: UIViewController {
     
-    let detailVerticalScrollView = UIScrollView()
-    let todayForecastView = TodayForecastView(timeStrings: ["지금", "1시", "2시", "3시", "4시", "5시", "6시", "7시"],
+    private let detailVerticalScrollView = UIScrollView()
+    let todayForecastView = TodayForecastView(timeStrings: ["지금", "11시", "12시", "1시", "2시", "3시", "4시", "5시"],
                                               icons: [UIImage(named: "heavy-rain")!,
                                                       UIImage(named: "heavy-rain")!,
                                                       UIImage(named: "light-rain")!,
@@ -23,22 +23,22 @@ class DetailViewController: UIViewController {
                                                       UIImage(named: "cloudy-night")!],
                                               temperatures: ["15°", "15°", "17°", "16°", "14°", "17°", "15°", "13°"])
     
-
-    let detailBackgroundImageView = UIImageView()
-    let locationLabel = UILabel()
-    let temperatureLabel = UILabel()
-    let conditionLabel = UILabel()
-    let temperatureRangeLabel = UILabel()
     
-    let cardView = UIView()
-    let descriptionLabel = UILabel()
-    let seperateLineView = UIView()
+    private let detailBackgroundImageView = UIImageView()
+    private let locationLabel = UILabel()
+    private let temperatureLabel = UILabel()
+    private let conditionLabel = UILabel()
+    private let temperatureRangeLabel = UILabel()
     
-    let mapButton = UIButton()
-    let currentLocationButton = UIButton()
-    let paginatorButton = UIButton()
-    let listButton = UIButton()
-    let bottomMenuLine = UIView() // 얘네 스택에 넣기
+    private let cardView = UIView()
+    private let descriptionLabel = UILabel()
+    private let seperateLineView = UIView()
+    
+    private let mapButton = UIButton()
+    private let currentLocationButton = UIButton()
+    private let paginatorButton = UIButton()
+    private let listButton = UIButton()
+    private let bottomMenuLine = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,7 @@ class DetailViewController: UIViewController {
         setStyle()
         listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
     }
-
+    
     override func viewDidLayoutSubviews() {
         self.cardView.subviews.forEach {
             $0.layoutSubviews()
@@ -56,14 +56,13 @@ class DetailViewController: UIViewController {
     @objc func listButtonTapped() {
         self.navigationController?.popViewController(animated: true)
     }
-    
 }
 
 private extension DetailViewController {
     
     func setStyle() {
         self.navigationController?.navigationBar.isHidden = true
-
+        
         detailVerticalScrollView.do {
             $0.alwaysBounceVertical = true
         }
@@ -144,16 +143,14 @@ private extension DetailViewController {
         view.addSubViews(detailBackgroundImageView, detailVerticalScrollView, mapButton, currentLocationButton, paginatorButton, listButton, bottomMenuLine)
         
         detailVerticalScrollView.addSubViews(locationLabel,
-                                           temperatureLabel,
-                                           conditionLabel,
-                                           temperatureRangeLabel,
-                                           cardView)
+                                             temperatureLabel,
+                                             conditionLabel,
+                                             temperatureRangeLabel,
+                                             cardView)
         
         cardView.addSubViews(descriptionLabel,
                              seperateLineView,
-                             todayForecastView) //scrollview 추가하기
-        
-//        todayForecastScrollView.addSubViews(todayForecastView) //스크롤뷰에 스택뷰 쌓기 (두개 더)
+                             todayForecastView)
         
         detailVerticalScrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -166,64 +163,71 @@ private extension DetailViewController {
             $0.bottom.equalToSuperview().inset(10)
         }
         
-        
         locationLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(76)
             $0.centerX.equalToSuperview()
         }
+        
         temperatureLabel.snp.makeConstraints {
             $0.top.equalTo(locationLabel.snp.bottom).inset(4)
             $0.leading.equalToSuperview().inset(122)
         }
+        
         conditionLabel.snp.makeConstraints {
             $0.top.equalTo(locationLabel.snp.top).inset(154)
             $0.centerX.equalToSuperview()
         }
+        
         temperatureRangeLabel.snp.makeConstraints {
             $0.top.equalTo(locationLabel.snp.top).inset(188)
             $0.centerX.equalToSuperview()
         }
+        
         cardView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(334)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(335)
             $0.height.equalTo(212)
         }
+        
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(cardView.snp.top).inset(10)
             $0.leading.equalTo(cardView.snp.leading).inset(15)
             $0.trailing.equalTo(cardView).offset(-15)
         }
+        
         seperateLineView.snp.makeConstraints {
             $0.top.equalTo(cardView.snp.top).inset(66)
             $0.leading.equalTo(cardView.snp.leading).inset(14)
             $0.height.equalTo(0.5)
             $0.width.equalTo(320)
         }
+        
         mapButton.snp.makeConstraints {
             $0.top.equalTo(bottomMenuLine.snp.top).inset(4)
             $0.leading.equalTo(bottomMenuLine.snp.leading).inset(10)
         }
+        
         currentLocationButton.snp.makeConstraints {
             $0.top.equalTo(bottomMenuLine.snp.top).inset(14)
             $0.trailing.equalTo(paginatorButton.snp.leading).inset(4)
         }
+        
         paginatorButton.snp.makeConstraints {
             $0.top.equalTo(bottomMenuLine.snp.top).inset(14)
             $0.leading.equalTo(bottomMenuLine.snp.leading).inset(189)
         }
+        
         listButton.snp.makeConstraints {
             $0.top.equalTo(bottomMenuLine.snp.top).inset(4)
             $0.trailing.equalTo(bottomMenuLine.snp.trailing).inset(9)
         }
+        
         bottomMenuLine.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-82)
             $0.width.equalToSuperview()
             $0.height.equalTo(0.5)
             $0.centerX.equalToSuperview()
         }
-        
-        
     }
-
 }
