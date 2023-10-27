@@ -7,23 +7,14 @@
 
 import UIKit
 import SnapKit
+import Then
+
 
 class TodayForecastView: UIScrollView {
-    let hourStackView = UIStackView().then {
-        $0.distribution = .equalSpacing
-        $0.spacing = 22
-        $0.axis = .horizontal
-    }
-    let weatherStackView = UIStackView().then {
-        $0.distribution = .equalSpacing
-        $0.spacing = 22
-        $0.axis = .horizontal
-    }
-    let temperatureStackView = UIStackView().then {
-        $0.distribution = .equalSpacing
-        $0.spacing = 22
-        $0.axis = .horizontal
-    }
+    
+    let hourStackView = UIStackView()
+    let weatherStackView = UIStackView()
+    let temperatureStackView = UIStackView()
     
     init(timeStrings: [String], icons: [UIImage], temperatures: [String]) {
         super.init(frame: .zero)
@@ -57,23 +48,22 @@ class TodayForecastView: UIScrollView {
         }
     }
     
-    func setLayout() {
+    private func setLayout() {
         
         self.addSubViews(hourStackView, weatherStackView, temperatureStackView)
         
-//        self.snp.makeConstraints { //뷰컨에서 나중에 seperateline이랑 같게 설정 top
-//            $0.top.equalToSuperview().offset(100)
-//        } // 요기가 문제야 ㅠㅠㅠ. ㅠ. ㅠ
         hourStackView.snp.makeConstraints {
             $0.top.equalTo(contentLayoutGuide).offset(14)
             $0.leading.equalTo(contentLayoutGuide)
             $0.trailing.equalTo(contentLayoutGuide)
         }
+        
         weatherStackView.snp.makeConstraints {
             $0.top.equalTo(self.hourStackView.snp.bottom).offset(14)
             $0.leading.equalTo(contentLayoutGuide)
             $0.trailing.equalTo(contentLayoutGuide)
         }
+        
         temperatureStackView.snp.makeConstraints {
             $0.top.equalTo(self.weatherStackView.snp.bottom).offset(14)
             $0.leading.equalTo(contentLayoutGuide)
@@ -82,23 +72,29 @@ class TodayForecastView: UIScrollView {
         }
     }
     
-    func setStyle() {
+    private func setStyle() {
         self.do {
             $0.alwaysBounceHorizontal = true
         }
+        hourStackView.do {
+            $0.distribution = .equalSpacing
+            $0.spacing = 22
+            $0.axis = .horizontal
+        }
+        weatherStackView.do {
+            $0.distribution = .equalSpacing
+            $0.spacing = 22
+            $0.axis = .horizontal
+        }
+        temperatureStackView.do {
+            $0.distribution = .equalSpacing
+            $0.spacing = 22
+            $0.axis = .horizontal
+        }
     }
     
-    func setupUI(timeStrings: [String], icons: [UIImage], temperatures: [String]) {
-        // 가로 스택뷰를 만드는 함수
-        func createHorizontalStackView() -> UIStackView {
-            let stackView = UIStackView()
-            stackView.axis = .horizontal
-            stackView.spacing = 10
-            stackView.distribution = .equalSpacing
-            return stackView
-        }
+    private func setupUI(timeStrings: [String], icons: [UIImage], temperatures: [String]) {
         
-        // 입력된 문자열 배열을 기반으로 UILabel 생성
         for timeString in timeStrings {
             let label = UILabel()
             label.text = timeString
@@ -108,14 +104,12 @@ class TodayForecastView: UIScrollView {
             hourStackView.addArrangedSubview(label)
         }
         
-        // 입력된 이미지 배열을 기반으로 UIImageView 생성
         for icon in icons {
             let imageView = UIImageView()
             imageView.image = icon
             weatherStackView.addArrangedSubview(imageView)
         }
         
-        // 입력된 문자열 배열을 기반으로 UILabel 생성
         for temperature in temperatures {
             let label = UILabel()
             label.text = temperature
