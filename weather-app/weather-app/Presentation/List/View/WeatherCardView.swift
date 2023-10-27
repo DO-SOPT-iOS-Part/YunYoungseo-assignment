@@ -7,15 +7,17 @@
 
 import UIKit
 import SnapKit
+import Then
+
 
 class WeatherCardView: UIButton {
         
-    let myLocation = UILabel()
-    let currentLocation = UILabel()
-    let currentCondition = UILabel()
-    let maxTemperature = UILabel()
-    let minTemperature = UILabel()
-    let currentTemperature = UILabel()
+    private let myLocation = UILabel()
+    private let currentLocation = UILabel()
+    private let currentCondition = UILabel()
+    private let maxTemperature = UILabel()
+    private let minTemperature = UILabel()
+    private let currentTemperature = UILabel()
     
     init() {
         super.init(frame: .zero)
@@ -28,8 +30,7 @@ class WeatherCardView: UIButton {
         super.init(coder: aDecoder)
     }
     
-    
-    func setLayout() {
+    private func setLayout() {
         self.addSubViews(myLocation,
                          currentLocation,
                          currentCondition,
@@ -68,7 +69,7 @@ class WeatherCardView: UIButton {
         }
     }
     
-    func setStyle() {
+    private func setStyle() {
         self.do {
             $0.setImage(UIImage(named: "list-image"), for:.normal)
             $0.layer.cornerRadius = 16

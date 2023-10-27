@@ -12,14 +12,14 @@ import Then
 
 class ListViewController: UIViewController {
     
-    let weatherCardView = WeatherCardView()
+    private let weatherCardView = WeatherCardView()
     
-    let listVerticalScrollView = UIScrollView()
-    let cardVerticalStackView = UIStackView()
+    private let listVerticalScrollView = UIScrollView()
+    private let cardVerticalStackView = UIStackView()
     
-    let titleLabel = UILabel()
-    let settingsIcon = UIImageView()
-    let searchBar = UISearchBar()
+    private let titleLabel = UILabel()
+    private let settingsIcon = UIImageView()
+    private let searchBar = UISearchBar()
     
     
     override func viewDidLoad() {
@@ -34,7 +34,6 @@ class ListViewController: UIViewController {
         let detailViewController = DetailViewController()
         self.navigationController?.pushViewController(detailViewController, animated: true) // View Controller를 Push
     }
-
 }
 
 private extension ListViewController {
@@ -75,7 +74,6 @@ private extension ListViewController {
             $0.centerX.equalToSuperview()
         }
     }
-    
     
     func setStyle() {
         
