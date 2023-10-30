@@ -26,13 +26,18 @@ class ListViewController: UIViewController {
         super.viewDidLoad()
         setLayout()
         setStyle()
+        hideKeyboardWhenTappedAround()
         
         weatherCardView.addTarget(self, action: #selector(weatherCardViewTapped), for: .touchUpInside)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+        self.view.endEditing(true)
+    }
+    
     @objc func weatherCardViewTapped() {
         let detailViewController = DetailViewController()
-        self.navigationController?.pushViewController(detailViewController, animated: true) // View Controller를 Push
+        self.navigationController?.pushViewController(detailViewController, animated: true)
     }
 }
 
@@ -78,9 +83,9 @@ private extension ListViewController {
     func setStyle() {
         
         self.navigationController?.navigationBar.isHidden = true
-
+        
         self.view.backgroundColor = .black
-
+        
         listVerticalScrollView.do {
             $0.alwaysBounceVertical = true
         }
@@ -105,5 +110,15 @@ private extension ListViewController {
             $0.searchTextField.attributedPlaceholder = NSAttributedString(string: "도시 또는 공항 검색",
                                                                           attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         }
+    }
+    
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
