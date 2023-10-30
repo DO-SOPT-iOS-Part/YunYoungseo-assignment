@@ -87,7 +87,7 @@ private extension ListViewController {
         
         titleLabel.do {
             $0.text = "날씨"
-            $0.font = UIFont.sfBold(size: 36)
+            $0.font = .sfBold(size: 36)
             $0.textColor = .white
         }
         
@@ -98,7 +98,7 @@ private extension ListViewController {
         searchBar.do {
             $0.setImage(UIImage(named:"search"), for:.search, state:.normal)
             $0.layer.cornerRadius = 10
-            $0.searchTextField.font = UIFont.sfRegular(size: 19)
+            $0.searchTextField.font = .sfRegular(size: 19)
             $0.searchTextField.textColor = .white
             $0.barTintColor = .clear
             $0.layer.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.1).cgColor

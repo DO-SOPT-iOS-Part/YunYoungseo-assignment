@@ -98,7 +98,7 @@ class TodayForecastView: UIScrollView {
         for timeString in timeStrings {
             let label = UILabel()
             label.text = timeString
-            label.font = UIFont.sfMedium(size: 17)
+            label.font = .sfMedium(size: 17)
             label.textColor = .white
             label.textAlignment = .center
             hourStackView.addArrangedSubview(label)
@@ -113,7 +113,7 @@ class TodayForecastView: UIScrollView {
         for temperature in temperatures {
             let label = UILabel()
             label.text = temperature
-            label.font = UIFont.sfMedium(size: 17)
+            label.font = .sfMedium(size: 17)
             label.textColor = .white
             label.textAlignment = .center
             temperatureStackView.addArrangedSubview(label)

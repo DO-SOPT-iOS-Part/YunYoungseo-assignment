@@ -75,25 +75,25 @@ private extension DetailViewController {
         
         locationLabel.do {
             $0.text = "고양시"
-            $0.font = UIFont.sfRegular(size: 36)
+            $0.font = .sfRegular(size: 36)
             $0.textColor = .white
         }
         
         temperatureLabel.do {
             $0.text = "21°"
-            $0.font = UIFont.sfThin(size: 102)
+            $0.font = .sfThin(size: 102)
             $0.textColor = .white
         }
         
         conditionLabel.do {
             $0.text = "흐림"
-            $0.font = UIFont.sfRegular(size: 24)
+            $0.font = .sfRegular(size: 24)
             $0.textColor = .white
         }
         
         temperatureRangeLabel.do {
             $0.text = "최고:29° 최저:15°"
-            $0.font = UIFont.sfMedium(size: 20)
+            $0.font = .sfMedium(size: 20)
             $0.textColor = .white
         }
         
@@ -107,7 +107,7 @@ private extension DetailViewController {
         
         descriptionLabel.do {
             $0.text = "08:00~09:00에 강우 상태가, 18:00에 한때 흐린 상태가 예상됩니다."
-            $0.font = UIFont.sfRegular(size: 18)
+            $0.font = .sfRegular(size: 18)
             $0.textColor = .white
             $0.numberOfLines = 2
             $0.lineBreakMode = .byWordWrapping
