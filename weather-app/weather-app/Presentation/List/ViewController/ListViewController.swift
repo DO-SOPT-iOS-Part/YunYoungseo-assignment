@@ -26,9 +26,8 @@ class ListViewController: UIViewController {
         super.viewDidLoad()
         setLayout()
         setStyle()
+        addTarget()
         hideKeyboardWhenTappedAround()
-        
-        weatherCardView.addTarget(self, action: #selector(weatherCardViewTapped), for: .touchUpInside)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
@@ -120,5 +119,9 @@ private extension ListViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    func addTarget() {
+        weatherCardView.addTarget(self, action: #selector(weatherCardViewTapped), for: .touchUpInside)
     }
 }
