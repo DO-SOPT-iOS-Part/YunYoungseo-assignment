@@ -9,9 +9,11 @@ import UIKit
 import SnapKit
 import Then
 
+
 class DetailViewController: UIViewController {
     
     private let detailVerticalScrollView = UIScrollView()
+    private let detailContentView = UIView()
     
     let todayForecastView = TodayForecastView(timeStrings: ["지금", "11시", "12시", "1시", "2시", "3시", "4시", "5시"],
                                               icons: [UIImage(named: "heavy-rain")!,
@@ -44,15 +46,24 @@ class DetailViewController: UIViewController {
     
     private let tenDaysForecastTableView = UITableView(frame: .zero, style: .plain)
     
+    private let data: CardCollectionData
+
+    init(data: CardCollectionData) {
+            self.data = data
+            super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setLayout()
         setStyle()
         addTarget()
         setTableViewConfig()
-        
     }
-    
     
     override func viewDidLayoutSubviews() {
         self.cardView.subviews.forEach {
@@ -79,10 +90,6 @@ private extension DetailViewController {
     
     func setStyle() {
         self.navigationController?.navigationBar.isHidden = true
-        
-        detailVerticalScrollView.do {
-            $0.alwaysBounceVertical = true
-        }
         
         detailBackgroundImageView.do {
             $0.image = UIImage(named: "background")
@@ -170,12 +177,14 @@ private extension DetailViewController {
     func setLayout() {
         view.addSubViews(detailBackgroundImageView, detailVerticalScrollView, bottomBarView)
         
-        detailVerticalScrollView.addSubViews(locationLabel,
-                                             temperatureLabel,
-                                             conditionLabel,
-                                             temperatureRangeLabel,
-                                             cardView,
-                                             tenDaysForecastTableView)
+        detailVerticalScrollView.addSubViews(detailContentView)
+        
+        detailContentView.addSubViews(locationLabel,
+                                      temperatureLabel,
+                                      conditionLabel,
+                                      temperatureRangeLabel,
+                                      cardView,
+                                      tenDaysForecastTableView)
         
         cardView.addSubViews(descriptionLabel,
                              seperateLineView,
@@ -184,7 +193,13 @@ private extension DetailViewController {
         bottomBarView.addSubViews(mapButton, currentLocationButton, paginatorButton, listButton)
         
         detailVerticalScrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        detailContentView.snp.makeConstraints {
+            $0.width.equalTo(detailVerticalScrollView)
+            $0.height.greaterThanOrEqualTo(view).priority(.low)
+            $0.edges.equalTo(detailVerticalScrollView)
         }
         
         todayForecastView.snp.makeConstraints {
@@ -262,10 +277,11 @@ private extension DetailViewController {
         }
         
         tenDaysForecastTableView.snp.makeConstraints {
-            $0.top.equalTo(cardView.snp.bottom).offset(20) //오옷 inset인지 offset인지 확인
+            $0.top.equalTo(cardView.snp.bottom).offset(20)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(335)
-            $0.height.equalTo(675)
+            $0.bottom.equalToSuperview().inset(50) //bottom을 맞추자
+            $0.height.equalTo(690) //오옷
         }
     }
     
@@ -300,7 +316,7 @@ extension DetailViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            return 38.0
+            return 10.0
         }
         return 0.0
         
