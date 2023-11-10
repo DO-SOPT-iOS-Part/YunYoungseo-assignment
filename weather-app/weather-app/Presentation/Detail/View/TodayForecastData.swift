@@ -23,7 +23,7 @@ struct TodayForecastData {
 }
 
 extension TodayForecastData {
-    static let todayForecastData: [TodayForecastData] = [.init(description: "08:00~09:00에 강우 상태가, 18:00에 한때 흐린 상태가 예상됩니다.",
+    static let todayForecastData: [TodayForecastData] = [.init(description: "오전 2시~3시에 부분적으로 흐린 상태가, 오전 3시에 대체로 흐린 상태가 예상됩니다.",
                                                                time: "지금",
                                                                conditionIcon: "heavy-rain", temperature: "15°"),
                                                          .init(description: "08:00~09:00에 강우 상태가, 18:00에 한때 흐린 상태가 예상됩니다.",

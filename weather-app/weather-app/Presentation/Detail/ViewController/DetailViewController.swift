@@ -43,7 +43,6 @@ class DetailViewController: UIViewController {
         addTarget()
         setCollectionViewConfig()
         setDetailCollectionViewLayout()
-        //        setTodayForecastCollectionViewLayout()
     }
     
     @objc func listButtonTapped() {
@@ -60,8 +59,6 @@ private extension DetailViewController {
         self.detailCollectionView.register(HorizontalContainerCollectionViewCell.self, forCellWithReuseIdentifier: HorizontalContainerCollectionViewCell.identifier)
         
         self.detailCollectionView.register(TenDaysForecastCollectionViewCell.self, forCellWithReuseIdentifier: TenDaysForecastCollectionViewCell.identifier)
-        
-        //        self.detailCollectionView.register(TodayCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TodayCollectionHeaderView.identifier)
         
         self.detailCollectionView.register(TenDaysCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TenDaysCollectionHeaderView.identifier)
         

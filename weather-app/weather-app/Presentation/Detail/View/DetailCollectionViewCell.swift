@@ -47,7 +47,7 @@ class DetailCollectionViewCell: UICollectionViewCell {
             $0.centerX.equalTo(self)
         }
         conditionLabel.snp.makeConstraints {
-            $0.top.equalTo(locationLabel.snp.top).inset(154) //오옷
+            $0.top.equalTo(locationLabel.snp.top).inset(154) 
             $0.centerX.equalTo(self)
         }
         temperatureStackView.snp.makeConstraints {

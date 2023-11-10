@@ -10,10 +10,7 @@ import UIKit
 class TodayForecastCollectionViewCell: UICollectionViewCell {
     
     static let identifier: String = "TodayForecastCollectionViewCell"
-    
-    private let descriptionLabel = UILabel()
-    private let seperateLineView = UIView()
-    
+        
     private let todayWeatherStackView = UIStackView()
     private let timeLabel = UILabel()
     private let conditionView = UIImageView()
@@ -32,7 +29,7 @@ class TodayForecastCollectionViewCell: UICollectionViewCell {
     private func setLayout(){
         self.contentView.addSubViews(todayWeatherStackView)
         self.todayWeatherStackView.addArrangedSubviews(timeLabel, conditionView, temperatureLabel)
-        
+    
         todayWeatherStackView.snp.makeConstraints {
             $0.center.equalTo(contentView)
         }
@@ -64,7 +61,7 @@ class TodayForecastCollectionViewCell: UICollectionViewCell {
     }
     
     func bindData(data: TodayForecastData) {
-        self.descriptionLabel.text = data.description
+//        self.descriptionLabel.text = data.description
         self.timeLabel.text = data.time
         self.temperatureLabel.text = data.temperature
         self.conditionView.image = UIImage(named: data.conditionIcon)
