@@ -1,16 +1,15 @@
 //
-//  TenDaysForecastTableViewCell.swift
+//  TenDaysForecastCollectionViewCell.swift
 //  weather-app
 //
-//  Created by 윤영서 on 10/30/23.
+//  Created by 윤영서 on 11/9/23.
 //
 
 import UIKit
 
-
-class TenDaysForecastTableViewCell: UITableViewCell {
+class TenDaysForecastCollectionViewCell: UICollectionViewCell {
     
-    static let identifier: String = "TenDaysForecastTableViewCell"
+    static let identifier: String = "TenDaysForecastCollectionViewCell"
     
     private let dayNameLabel = UILabel()
     
@@ -22,10 +21,8 @@ class TenDaysForecastTableViewCell: UITableViewCell {
     private let tempGradientView = UIImageView()
     private let maxTempLabel = UILabel()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = .clear
-        
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setLayout()
         setStyle()
     }
@@ -38,7 +35,7 @@ class TenDaysForecastTableViewCell: UITableViewCell {
         
         self.contentView.addSubViews(dayNameLabel, conditionStackView, minTempLabel, tempGradientView, maxTempLabel)
         
-        conditionStackView.addArrangedSubviews(conditionIcon, precipPercentLabel)
+        conditionStackView.addArrangedSubviews(conditionIcon, precipPercentLabel) //오옷
         
         dayNameLabel.snp.makeConstraints {
             $0.top.equalTo(contentView).offset(14)
@@ -46,8 +43,8 @@ class TenDaysForecastTableViewCell: UITableViewCell {
         }
         
         conditionStackView.snp.makeConstraints {
-            $0.top.equalTo(dayNameLabel)
-            $0.leading.equalTo(dayNameLabel.snp.leading).offset(65)
+            $0.centerY.equalTo(contentView)
+            $0.centerX.equalTo(contentView).offset(-65)
         }
         
         minTempLabel.snp.makeConstraints {
@@ -78,8 +75,11 @@ class TenDaysForecastTableViewCell: UITableViewCell {
         conditionStackView.do {
             $0.axis = .vertical
             $0.distribution = .equalSpacing
-            $0.spacing = 0.85
             $0.alignment = .center
+        }
+        
+        conditionIcon.do {
+            $0.tintColor = .white //오옷
         }
         
         precipPercentLabel.do {
@@ -100,7 +100,7 @@ class TenDaysForecastTableViewCell: UITableViewCell {
     
     func bindData(data: TenDaysForecastData) {
         self.dayNameLabel.text = data.day
-        self.conditionIcon.image = UIImage(named: data.icon)
+        self.conditionIcon.image = UIImage(systemName: data.icon)
         self.precipPercentLabel.text = data.precip
         self.minTempLabel.text = data.minTemp
         self.tempGradientView.image = UIImage(named: data.tempImage)
