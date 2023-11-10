@@ -43,17 +43,18 @@ class HorizontalContainerCollectionViewCell: UICollectionViewCell {
     
     func setStyle() {
         horizontalCollectionView.do {
-            $0.backgroundColor = .clear
+            $0.backgroundColor =  UIColor(red: 0.175, green: 0.201, blue: 0.249, alpha: 1)
             $0.layer.cornerRadius = 15
             $0.layer.borderWidth = 0.5
             $0.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.25).cgColor
+            $0.isScrollEnabled = true
         }
     }
     
     func setCollectionViewLayout() {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumLineSpacing = 22 // 레퍼런스에선 안해줌
+        flowLayout.minimumLineSpacing = 22
         self.horizontalCollectionView.collectionViewLayout = flowLayout
     }
     
@@ -63,25 +64,22 @@ class HorizontalContainerCollectionViewCell: UICollectionViewCell {
         
         self.horizontalCollectionView.delegate = self
         self.horizontalCollectionView.dataSource = self
-        self.horizontalCollectionView.isScrollEnabled = true
+        
     }
 }
-
 
 extension HorizontalContainerCollectionViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return todayDummy.count
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let item = horizontalCollectionView.dequeueReusableCell(withReuseIdentifier: TodayForecastCollectionViewCell.identifier, for: indexPath) as? TodayForecastCollectionViewCell else { return UICollectionViewCell() }
         item.bindData(data: todayDummy[indexPath.row])
         return item
     }
-    
-}
 
+}
 
 
 extension HorizontalContainerCollectionViewCell: UICollectionViewDelegateFlowLayout {
@@ -92,3 +90,5 @@ extension HorizontalContainerCollectionViewCell: UICollectionViewDelegateFlowLay
         return UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
     }
 }
+
+

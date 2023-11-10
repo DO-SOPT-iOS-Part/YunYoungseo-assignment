@@ -34,8 +34,6 @@ class TodayForecastCollectionViewCell: UICollectionViewCell {
         self.todayWeatherStackView.addArrangedSubviews(timeLabel, conditionView, temperatureLabel)
         
         todayWeatherStackView.snp.makeConstraints {
-//            $0.top.equalTo(self).offset(10)
-//            $0.leading.equalTo(contentView)
             $0.center.equalTo(contentView)
         }
     }

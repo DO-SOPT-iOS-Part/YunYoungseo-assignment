@@ -66,7 +66,7 @@ class TenDaysForecastCollectionViewCell: UICollectionViewCell {
     }
     
     
-    private func setStyle() { //아이콘 넣어야해
+    private func setStyle() {
         dayNameLabel.do {
             $0.font = .sfMedium(size: 22)
             $0.textColor = .white
@@ -79,7 +79,7 @@ class TenDaysForecastCollectionViewCell: UICollectionViewCell {
         }
         
         conditionIcon.do {
-            $0.tintColor = .white //오옷
+            $0.tintColor = .white
         }
         
         precipPercentLabel.do {

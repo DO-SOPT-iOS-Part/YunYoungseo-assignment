@@ -23,7 +23,6 @@ class ListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.prefersLargeTitles = true
         setLayout()
         setStyle()
         setCollectionViewConfig()
@@ -120,17 +119,12 @@ private extension ListViewController {
         self.navigationController?.navigationBar.largeTitleTextAttributes = titleTextAttributes
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationItem.largeTitleDisplayMode = .always
+        
         self.navigationItem.title = "날씨"
         self.navigationItem.searchController = searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.navigationItem.rightBarButtonItem = menuButton
         self.navigationController?.navigationBar.barTintColor = UIColor.darkGray.withAlphaComponent(0.01)
-        //        if let navigationBar = self.navigationController?.navigationBar {
-        //            navigationBar.barTintColor = UIColor.clear // 배경색을 투명하게 설정
-        //            navigationBar.setBackgroundImage(UIImage(), for: .default)
-        //            navigationBar.shadowImage = UIImage() // 네비게이션 바의 그림자 제거
-        //            navigationBar.isTranslucent = true // 투명 모드 활성화
-        //        }
     }
     
 }
