@@ -9,40 +9,48 @@ import UIKit
 import SnapKit
 import Then
 
-
 class DetailViewController: UIViewController {
     
-    private let detailCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let detailVerticalScrollView = UIScrollView()
+    let todayForecastView = TodayForecastView(timeStrings: ["지금", "11시", "12시", "1시", "2시", "3시", "4시", "5시"],
+                                              icons: [UIImage(named: "heavy-rain")!,
+                                                      UIImage(named: "heavy-rain")!,
+                                                      UIImage(named: "light-rain")!,
+                                                      UIImage(named: "rainy-sunny")!,
+                                                      UIImage(named: "rainy-sunny")!,
+                                                      UIImage(named: "light-rain")!,
+                                                      UIImage(named: "cloudy-night")!,
+                                                      UIImage(named: "cloudy-night")!],
+                                              temperatures: ["15°", "15°", "17°", "16°", "14°", "17°", "15°", "13°"])
+    
     
     private let detailBackgroundImageView = UIImageView()
+    private let locationLabel = UILabel()
+    private let temperatureLabel = UILabel()
+    private let conditionLabel = UILabel()
+    private let temperatureRangeLabel = UILabel()
     
-    private let bottomBarView = UIView()
+    private let cardView = UIView()
+    private let descriptionLabel = UILabel()
+    private let seperateLineView = UIView()
+    
     private let mapButton = UIButton()
     private let currentLocationButton = UIButton()
     private let paginatorButton = UIButton()
     private let listButton = UIButton()
-    
-    private let detailDummy: CardCollectionData
-    private var tenDaysDummy = TenDaysForecastData.tenDaysForecastData
-    private var todayDummy = TodayForecastData.todayForecastData
-    
-    init(data: CardCollectionData) {
-        self.detailDummy = data
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private let bottomMenuLine = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setViews()
-        setConstraints()
+        setLayout()
         setStyle()
-        addTarget()
-        setCollectionViewConfig()
-        setDetailCollectionViewLayout()
+        listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        self.cardView.subviews.forEach {
+            $0.layoutSubviews()
+        }
     }
     
     @objc func listButtonTapped() {
@@ -52,65 +60,11 @@ class DetailViewController: UIViewController {
 
 private extension DetailViewController {
     
-    func setCollectionViewConfig() {
-        self.detailCollectionView.register(DetailCollectionViewCell.self,
-                                           forCellWithReuseIdentifier: DetailCollectionViewCell.identifier)
-        
-        self.detailCollectionView.register(HorizontalContainerCollectionViewCell.self, forCellWithReuseIdentifier: HorizontalContainerCollectionViewCell.identifier)
-        
-        self.detailCollectionView.register(TenDaysForecastCollectionViewCell.self, forCellWithReuseIdentifier: TenDaysForecastCollectionViewCell.identifier)
-        
-        self.detailCollectionView.register(TenDaysCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TenDaysCollectionHeaderView.identifier)
-        
-        self.detailCollectionView.delegate = self
-        self.detailCollectionView.dataSource = self
-    }
-    
-    
-    func setViews() {
-        view.addSubViews(detailBackgroundImageView, detailCollectionView, bottomBarView)
-        bottomBarView.addSubViews(mapButton, currentLocationButton, paginatorButton, listButton)
-    }
-    
-    func setConstraints() {
-        
-        detailCollectionView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
-        }
-        
-        bottomBarView.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.centerX.equalToSuperview()
-            $0.width.equalTo(375)
-            $0.height.equalTo(82)
-        }
-        
-        mapButton.snp.makeConstraints {
-            $0.top.equalTo(bottomBarView.snp.top).inset(4)
-            $0.leading.equalTo(bottomBarView.snp.leading).inset(10)
-        }
-        
-        currentLocationButton.snp.makeConstraints {
-            $0.top.equalTo(bottomBarView.snp.top).inset(14)
-            $0.trailing.equalTo(paginatorButton.snp.leading).inset(4)
-        }
-        
-        paginatorButton.snp.makeConstraints {
-            $0.top.equalTo(bottomBarView.snp.top).inset(14)
-            $0.leading.equalTo(bottomBarView.snp.leading).inset(189)
-        }
-        
-        listButton.snp.makeConstraints {
-            $0.top.equalTo(bottomBarView.snp.top).inset(4)
-            $0.trailing.equalTo(bottomBarView.snp.trailing).inset(9)
-        }
-    }
-    
     func setStyle() {
         self.navigationController?.navigationBar.isHidden = true
         
-        detailCollectionView.do {
-            $0.backgroundColor = .clear
+        detailVerticalScrollView.do {
+            $0.alwaysBounceVertical = true
         }
         
         detailBackgroundImageView.do {
@@ -119,8 +73,48 @@ private extension DetailViewController {
             $0.frame = self.view.bounds
         }
         
-        bottomBarView.do {
-            $0.layer.backgroundColor = UIColor(red: 0.165, green: 0.188, blue: 0.251, alpha: 1).cgColor
+        locationLabel.do {
+            $0.text = "고양시"
+            $0.font = UIFont.sfRegular(size: 36)
+            $0.textColor = .white
+        }
+        
+        temperatureLabel.do {
+            $0.text = "21°"
+            $0.font = UIFont.sfThin(size: 102)
+            $0.textColor = .white
+        }
+        
+        conditionLabel.do {
+            $0.text = "흐림"
+            $0.font = UIFont.sfRegular(size: 24)
+            $0.textColor = .white
+        }
+        
+        temperatureRangeLabel.do {
+            $0.text = "최고:29° 최저:15°"
+            $0.font = UIFont.sfMedium(size: 20)
+            $0.textColor = .white
+        }
+        
+        cardView.do {
+            $0.backgroundColor = UIColor(white: 1, alpha: 0.006)
+            $0.layer.cornerRadius = 15
+            $0.layer.borderWidth = 0.5
+            $0.layer.borderColor = .init(red: 1, green: 1, blue: 1, alpha: 0.25)
+            $0.clipsToBounds = true
+        }
+        
+        descriptionLabel.do {
+            $0.text = "08:00~09:00에 강우 상태가, 18:00에 한때 흐린 상태가 예상됩니다."
+            $0.font = UIFont.sfRegular(size: 18)
+            $0.textColor = .white
+            $0.numberOfLines = 2
+            $0.lineBreakMode = .byWordWrapping
+        }
+        
+        seperateLineView.do {
+            $0.backgroundColor = UIColor(white: 1, alpha: 0.25)
         }
         
         mapButton.do {
@@ -139,112 +133,101 @@ private extension DetailViewController {
             $0.setImage(UIImage(named: "list-icon"), for: .normal)
             $0.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
         }
-    }
-    
-    func setDetailCollectionViewLayout() {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        self.detailCollectionView.setCollectionViewLayout(flowLayout, animated: false)
-    }
-    
-    func addTarget() {
-        listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
-    }
-}
-
-
-extension DetailViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            return 1
-        case 2:
-            return tenDaysDummy.count
-        default:
-            return 0
+        
+        bottomMenuLine.do {
+            $0.backgroundColor = UIColor(white: 1, alpha: 0.25)
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch indexPath.section {
-            
-        case 0:
-            guard let item = detailCollectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as?
-                    DetailCollectionViewCell else { return UICollectionViewCell() }
-            item.bindData(data: detailDummy)
-            
-            return item
-            
-        case 1:
-            guard let item = detailCollectionView.dequeueReusableCell(withReuseIdentifier: HorizontalContainerCollectionViewCell.identifier, for: indexPath) as? HorizontalContainerCollectionViewCell else { return UICollectionViewCell() }
-            return item
-            
-        case 2:
-            guard let item = detailCollectionView.dequeueReusableCell(withReuseIdentifier: TenDaysForecastCollectionViewCell.identifier, for: indexPath) as? TenDaysForecastCollectionViewCell else { return UICollectionViewCell() }
-            item.bindData(data: tenDaysDummy[indexPath.row])
-            return item
-            
-        default:
-            return UICollectionViewCell()
+    func setLayout() {
+        view.addSubViews(detailBackgroundImageView, detailVerticalScrollView, mapButton, currentLocationButton, paginatorButton, listButton, bottomMenuLine)
+        
+        detailVerticalScrollView.addSubViews(locationLabel,
+                                             temperatureLabel,
+                                             conditionLabel,
+                                             temperatureRangeLabel,
+                                             cardView)
+        
+        cardView.addSubViews(descriptionLabel,
+                             seperateLineView,
+                             todayForecastView)
+        
+        detailVerticalScrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if indexPath.section == 2 {
-            let header = detailCollectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TenDaysCollectionHeaderView.identifier, for: indexPath)
-            return header
-        } else {
-            return UICollectionReusableView()
+        
+        todayForecastView.snp.makeConstraints {
+            $0.top.equalTo(seperateLineView.snp.bottom)
+            $0.leading.equalTo(cardView.snp.leading).inset(20)
+            $0.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(10)
         }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForHeaderInSection section: Int) -> CGSize {
-        if section == 2 {
-            return CGSize(width: 335, height: 38)
-        } else {
-            return CGSize.zero // 다른 섹션은 header가 없음
+        
+        locationLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(76)
+            $0.centerX.equalToSuperview()
         }
-    }
-
-}
-
-extension DetailViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        switch indexPath.section {
-        case 0:
-            let itemWidthOrHeight: CGFloat = 300
-            return CGSize(width: 352, height: itemWidthOrHeight)
-        case 1:
-            let itemWidthOrHeight: CGFloat = 212
-            return CGSize(width: collectionView.frame.size.width, height: itemWidthOrHeight)
-        case 2:
-            let itemWidthOrHeight: CGFloat = 55
-            return CGSize(width: 335, height: itemWidthOrHeight)
-        default:
-            return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        
+        temperatureLabel.snp.makeConstraints {
+            $0.top.equalTo(locationLabel.snp.bottom).inset(4)
+            $0.leading.equalToSuperview().inset(122)
         }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let sectionInsets = UIEdgeInsets.zero
-        switch section {
-        case 0:
-            return UIEdgeInsets(top: 0, left: 0, bottom: 44, right: 0)
-        case 1:
-            return UIEdgeInsets(top: 0, left: 8, bottom: 16, right: 0)
-        case 2:
-            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        default:
-            break
+        
+        conditionLabel.snp.makeConstraints {
+            $0.top.equalTo(locationLabel.snp.top).inset(154)
+            $0.centerX.equalToSuperview()
         }
-        return sectionInsets
+        
+        temperatureRangeLabel.snp.makeConstraints {
+            $0.top.equalTo(locationLabel.snp.top).inset(188)
+            $0.centerX.equalToSuperview()
+        }
+        
+        cardView.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(334)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(335)
+            $0.height.equalTo(212)
+        }
+        
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(cardView.snp.top).inset(10)
+            $0.leading.equalTo(cardView.snp.leading).inset(15)
+            $0.trailing.equalTo(cardView).offset(-15)
+        }
+        
+        seperateLineView.snp.makeConstraints {
+            $0.top.equalTo(cardView.snp.top).inset(66)
+            $0.leading.equalTo(cardView.snp.leading).inset(14)
+            $0.height.equalTo(0.5)
+            $0.width.equalTo(320)
+        }
+        
+        mapButton.snp.makeConstraints {
+            $0.top.equalTo(bottomMenuLine.snp.top).inset(4)
+            $0.leading.equalTo(bottomMenuLine.snp.leading).inset(10)
+        }
+        
+        currentLocationButton.snp.makeConstraints {
+            $0.top.equalTo(bottomMenuLine.snp.top).inset(14)
+            $0.trailing.equalTo(paginatorButton.snp.leading).inset(4)
+        }
+        
+        paginatorButton.snp.makeConstraints {
+            $0.top.equalTo(bottomMenuLine.snp.top).inset(14)
+            $0.leading.equalTo(bottomMenuLine.snp.leading).inset(189)
+        }
+        
+        listButton.snp.makeConstraints {
+            $0.top.equalTo(bottomMenuLine.snp.top).inset(4)
+            $0.trailing.equalTo(bottomMenuLine.snp.trailing).inset(9)
+        }
+        
+        bottomMenuLine.snp.makeConstraints {
+            $0.bottom.equalToSuperview().offset(-82)
+            $0.width.equalToSuperview()
+            $0.height.equalTo(0.5)
+            $0.centerX.equalToSuperview()
+        }
     }
 }
