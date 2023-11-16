@@ -1,0 +1,10 @@
+//
+//  Config.xcconfig
+//  weather-app
+//
+//  Created by 윤영서 on 11/14/23.
+//
+
+// Configuration settings file format documentation can be found at:
+BASE_URL = https:/$()/api.openweathermap.org
+API_KEY = a464ee2361eef27018205f2c648ea8ab
