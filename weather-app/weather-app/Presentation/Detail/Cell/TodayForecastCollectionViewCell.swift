@@ -61,11 +61,9 @@ class TodayForecastCollectionViewCell: UICollectionViewCell {
     }
     
     func bindData(data: TodayForecastData) {
-//        self.descriptionLabel.text = data.description
         self.timeLabel.text = data.time
         self.temperatureLabel.text = data.temperature
         self.conditionView.image = UIImage(named: data.conditionIcon)
     }
-    
 }
 

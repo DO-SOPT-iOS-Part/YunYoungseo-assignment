@@ -13,8 +13,8 @@ class CardCollectionViewCell: UICollectionViewCell {
     
     private let listBackgroundImage = UIImageView()
     
-    private let myLocation = UILabel()
-    private let currentLocation = UILabel()
+    private let location = UILabel()
+    private var currentTime = UILabel()
     private let currentCondition = UILabel()
     private let maxTemperature = UILabel()
     private let minTemperature = UILabel()
@@ -34,8 +34,8 @@ class CardCollectionViewCell: UICollectionViewCell {
         
         self.contentView.addSubViews(listBackgroundImage)
         
-        listBackgroundImage.addSubViews(myLocation,
-                                        currentLocation,
+        listBackgroundImage.addSubViews(location,
+                                        currentTime,
                                         currentCondition,
                                         maxTemperature,
                                         minTemperature,
@@ -45,12 +45,12 @@ class CardCollectionViewCell: UICollectionViewCell {
             $0.edges.equalTo(contentView)
         }
         
-        myLocation.snp.makeConstraints {
+        location.snp.makeConstraints {
             $0.top.equalTo(self).offset(10)
             $0.leading.equalTo(self).offset(16)
         }
         
-        currentLocation.snp.makeConstraints {
+        currentTime.snp.makeConstraints {
             $0.top.equalTo(self).offset(44)
             $0.leading.equalTo(self).offset(16)
         }
@@ -79,16 +79,17 @@ class CardCollectionViewCell: UICollectionViewCell {
     private func setStyle() {
         
         listBackgroundImage.do {
+            $0.image = UIImage(named: "background")
             $0.layer.cornerRadius = 16
-            $0.isUserInteractionEnabled = true // 오옷 pop / push  확인해야해
+            $0.isUserInteractionEnabled = true
         }
         
-        myLocation.do {
+        location.do {
             $0.font = .sfBold(size: 24)
             $0.textColor = .white
         }
         
-        currentLocation.do {
+        currentTime.do {
             $0.font = .sfMedium(size: 17)
             $0.textColor = .white
         }
@@ -102,24 +103,24 @@ class CardCollectionViewCell: UICollectionViewCell {
             $0.font = .sfMedium(size: 15)
             $0.textColor = .white
         }
+        
         minTemperature.do {
             $0.font = .sfMedium(size: 15)
             $0.textColor = .white
         }
+        
         currentTemperature.do {
             $0.font = .sfLight(size: 52)
             $0.textColor = .white
         }
     }
     
-    func bindData(data: CardCollectionData) {
-        self.listBackgroundImage.image = UIImage(named: data.backgroundImage)
-        self.myLocation.text = data.location
-        self.currentLocation.text = data.time
-        self.currentCondition.text = data.condition
-        self.minTemperature.text = data.minTemp
-        self.maxTemperature.text = data.maxTemp
-        self.currentTemperature.text = data.temperature
-        
+    func configureCell(data: WeatherListModel) {
+        location.text = data.cityName
+        currentTime.text = String().changeListTime()
+        currentCondition.text = data.condition
+        maxTemperature.text = "최고:\(data.maxTemp)°"
+        minTemperature.text = "최저:\(data.maxTemp)°"
+        currentTemperature.text = "\(data.temperature)°"
     }
 }

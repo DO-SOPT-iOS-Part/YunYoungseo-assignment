@@ -22,18 +22,18 @@ class DetailViewController: UIViewController {
     private let paginatorButton = UIButton()
     private let listButton = UIButton()
     
-    private let detailDummy: CardCollectionData
+//    private let detailDummy: CardCollectionData
     private var tenDaysDummy = TenDaysForecastData.tenDaysForecastData
     private var todayDummy = TodayForecastData.todayForecastData
     
-    init(data: CardCollectionData) {
-        self.detailDummy = data
-        super.init(nibName: nil, bundle: nil)
-    }
+//    init(data: CardCollectionData) {
+//        self.detailDummy = data
+//        super.init(nibName: nil, bundle: nil)
+//    }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -177,7 +177,7 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
         case 0:
             guard let item = detailCollectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as?
                     DetailCollectionViewCell else { return UICollectionViewCell() }
-            item.bindData(data: detailDummy)
+//            item.bindData(data: detailDummy)
             
             return item
             

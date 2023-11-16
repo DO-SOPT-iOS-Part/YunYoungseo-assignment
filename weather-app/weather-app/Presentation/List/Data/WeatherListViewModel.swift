@@ -8,14 +8,14 @@
 import Foundation
 
 class WeatherListViewModel {
-    let cityNameList: [String] = ["seoul", "daegu", "ulsan", "chuncheon", "jeju"]
+    let cityNameList: [String] = ["seoul", "paris", "daegu", "ulsan", "chuncheon", "jeju", "london"]
     lazy var weatherListModel: [WeatherListModel] = []
     
     func fetchIndexOfWeather(forIndex: Int) -> WeatherListModel {
         return weatherListModel[forIndex]
     }
     
-    func fetchWeatherList() {
+    func fetchWeatherList(completion: @escaping () -> Void) {
         Task {
             weatherListModel.removeAll()
             for cityName in cityNameList {
@@ -26,17 +26,20 @@ class WeatherListViewModel {
                     print(error)
                 }
             }
+            DispatchQueue.main.async {
+                completion()
+            }
         }
     }
-    
 }
+
 extension WeatherListViewModel {
     func bindData(data: WeatherInfoDataModel) -> WeatherListModel {
-        return WeatherListModel(cityName: data.name,
+        return WeatherListModel(cityName: data.name.toKorCityName(),
                                 time: String(data.timezone),
                                 condition: data.weather[0].main,
                                 temperature: Int(data.main.temp),
                                 minTemp: Int(data.main.tempMin),
-                                maxTemp: Int(data.main.tempMax))
+                                maxTemp: Int(data.main.temp))
     }
 }
