@@ -12,7 +12,7 @@ import Then
 
 class ListViewController: UIViewController {
     
-    //    var filteredData: [CardCollectionData] = [] //검색
+    var filteredData: [WeatherListModel] = []
     lazy var weatherListModel: [WeatherListModel] = []
     let weatherListViewModel = WeatherListViewModel()
     
@@ -36,10 +36,12 @@ class ListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         weatherListViewModel.fetchWeatherList {
+            self.weatherListModel = self.weatherListViewModel.weatherListModel
+            self.filteredData = self.weatherListModel
             self.cardCollectionView.reloadData()
         }
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
         self.view.endEditing(true)
     }
@@ -101,7 +103,7 @@ private extension ListViewController {
     
     func setSearchController() {
         searchController.do {
-            //            $0.searchResultsUpdater = self //검색
+            $0.searchResultsUpdater = self
             $0.obscuresBackgroundDuringPresentation = true
             $0.hidesNavigationBarDuringPresentation = false
             $0.definesPresentationContext = true
@@ -123,26 +125,10 @@ private extension ListViewController {
         self.navigationItem.rightBarButtonItem = menuButton
         self.navigationController?.navigationBar.barTintColor = UIColor.darkGray.withAlphaComponent(0.01)
     }
-    
 }
 
-
-
-//extension ListViewController: UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//            let selectedData: CardCollectionData
-//            if searchController.isActive {
-//                selectedData = filteredData[indexPath.row]
-//            } else {
-//                selectedData = cardCollectionList[indexPath.row]
-//            }
-//            // 선택된 데이터를 DetailViewController에 전달하고 화면을 전환
-//            let detailViewController = DetailViewController(data: selectedData)
-//            self.navigationController?.pushViewController(detailViewController, animated: true)
-//        }
-//}
-
 extension ListViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //            if searchController.isActive {
         //                selectedData = filteredData[indexPath.row]
@@ -156,55 +142,31 @@ extension ListViewController: UICollectionViewDelegate {
 }
 
 extension ListViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return searchController.isActive ? 0 : self.weatherListViewModel.weatherListModel.count
-    }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return searchController.isActive ? filteredData.count : weatherListModel.count
+    }
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = cardCollectionView.dequeueReusableCell(withReuseIdentifier: CardCollectionViewCell.identifier, for: indexPath) as? CardCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureCell(data: weatherListViewModel.fetchIndexOfWeather(forIndex: indexPath.item))
-//        let weatherData = self.weatherListViewModel.weatherListModel[indexPath.row]
+        let data = searchController.isActive ? filteredData[indexPath.item] : weatherListModel[indexPath.item]
+        cell.configureCell(data: data)
         return cell
     }
 }
-//func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherListCollectionViewCell.identifier, for: indexPath) as? WeatherListCollectionViewCell else { return UICollectionViewCell() }
-//        cell.configureCell(forModel: viewModel.fetchIndexOfWeather(forIndex: indexPath.item))
-//        return cell
-//    }
 
-//func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherListCollectionViewCell.identifier, for: indexPath) as? WeatherListCollectionViewCell else { return UICollectionViewCell() }
-//        cell.configureCell(forModel: viewModel.fetchIndexOfWeather(forIndex: indexPath.item))
-//        return cell
-//    }
-
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return searchController.isActive ? filteredData.count : cardCollectionList.count
-//    }
-
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        guard let item = cardCollectionView.dequeueReusableCell(withReuseIdentifier: CardCollectionViewCell.identifier, for: indexPath) as? CardCollectionViewCell else {
-//            return UICollectionViewCell()
-//        }
-//
-//        let data = searchController.isActive ? filteredData[indexPath.row] : cardCollectionList[indexPath.row]
-//        item.bindData(data: data)
-//
-//        return item
-//    }
-//}
-
-//extension ListViewController: UISearchResultsUpdating { // 검색
-//    func updateSearchResults(for searchController: UISearchController) {
-//        if let searchText = searchController.searchBar.text?.lowercased(), !searchText.isEmpty {
-//            filteredData = cardCollectionList.filter { cardData in
-//                return cardData.location.lowercased().contains(searchText)
-//            }
-//        } else {
-//            filteredData.removeAll()
-//        }
-//        cardCollectionView.reloadData()
-//    }
-//}
+extension ListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text?.lowercased(), !searchText.isEmpty else {
+            filteredData = weatherListModel
+            cardCollectionView.reloadData()
+            return
+        }
+        // 검색어에 따라 weatherListModel에서 필터링
+        filteredData = weatherListModel.filter { model in
+            return model.cityName.lowercased().contains(searchText)
+        }
+        cardCollectionView.reloadData()
+    }
+}
 
