@@ -12,17 +12,18 @@ import Then
 
 class ListViewController: UIViewController {
     
-    var filteredData: [CardCollectionData] = []
+    var filteredData: [WeatherListModel] = []
+    lazy var weatherListModel: [WeatherListModel] = []
+    let weatherListViewModel = WeatherListViewModel()
     
     let searchController = UISearchController(searchResultsController: nil)
     let menuButton = UIBarButtonItem(image: UIImage(named: "settings"))
     
     private let cardCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    private var cardCollectionList: [CardCollectionData] = CardCollectionData.cardCollectionData
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setLayout()
         setStyle()
         setCollectionViewConfig()
@@ -30,21 +31,24 @@ class ListViewController: UIViewController {
         setSearchController()
         setNavigationBar()
         hideKeyboardWhenTappedAround()
-        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        weatherListViewModel.fetchWeatherList {
+            self.weatherListModel = self.weatherListViewModel.weatherListModel
+            self.filteredData = self.weatherListModel
+            self.cardCollectionView.reloadData()
+        }
+    }
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
         self.view.endEditing(true)
     }
-    
-    
-//    @objc func weatherCardViewTapped() {
-//        let detailViewController = DetailViewController()
-//        self.navigationController?.pushViewController(detailViewController, animated: true)
-//    }
 }
 
 private extension ListViewController {
+  
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -81,7 +85,6 @@ private extension ListViewController {
         menuButton.do {
             $0.tintColor = .white
         }
-        
     }
     
     func setCollectionViewConfig() {
@@ -94,17 +97,13 @@ private extension ListViewController {
     func setCollectionViewLayout() {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
-        //        flowLayout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
         flowLayout.itemSize = CGSize(width: 335, height: 117)
-        //            flowLayout.minimumLineSpacing = 3
-        //            flowLayout.minimumInteritemSpacing = 3
         self.cardCollectionView.setCollectionViewLayout(flowLayout, animated: false)
     }
     
     func setSearchController() {
         searchController.do {
             $0.searchResultsUpdater = self
-            
             $0.obscuresBackgroundDuringPresentation = true
             $0.hidesNavigationBarDuringPresentation = false
             $0.definesPresentationContext = true
@@ -126,50 +125,47 @@ private extension ListViewController {
         self.navigationItem.rightBarButtonItem = menuButton
         self.navigationController?.navigationBar.barTintColor = UIColor.darkGray.withAlphaComponent(0.01)
     }
-    
 }
+
 extension ListViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            let selectedData: CardCollectionData
-            if searchController.isActive {
-                selectedData = filteredData[indexPath.row]
-            } else {
-                selectedData = cardCollectionList[indexPath.row]
-            }
-            // 선택된 데이터를 DetailViewController에 전달하고 화면을 전환
-            let detailViewController = DetailViewController(data: selectedData)
-            self.navigationController?.pushViewController(detailViewController, animated: true)
-        }
+        //            if searchController.isActive {
+        //                selectedData = filteredData[indexPath.row]
+        //            } else {
+        //                selectedData = cardCollectionList[indexPath.row]
+        //            }
+        //            // 선택된 데이터를 DetailViewController에 전달하고 화면을 전환
+        //            let detailViewController = DetailViewController(data: selectedData)
+        //            self.navigationController?.pushViewController(detailViewController, animated: true)
+    }
 }
 
 extension ListViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return searchController.isActive ? filteredData.count : cardCollectionList.count
+        return searchController.isActive ? filteredData.count : weatherListModel.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let item = cardCollectionView.dequeueReusableCell(withReuseIdentifier: CardCollectionViewCell.identifier, for: indexPath) as? CardCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        let data = searchController.isActive ? filteredData[indexPath.row] : cardCollectionList[indexPath.row]
-        item.bindData(data: data)
-        
-        return item
+        guard let cell = cardCollectionView.dequeueReusableCell(withReuseIdentifier: CardCollectionViewCell.identifier, for: indexPath) as? CardCollectionViewCell else { return UICollectionViewCell() }
+        let data = searchController.isActive ? filteredData[indexPath.item] : weatherListModel[indexPath.item]
+        cell.configureCell(data: data)
+        return cell
     }
 }
 
 extension ListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        if let searchText = searchController.searchBar.text?.lowercased(), !searchText.isEmpty {
-            filteredData = cardCollectionList.filter { cardData in
-                return cardData.location.lowercased().contains(searchText)
-            }
-        } else {
-            filteredData.removeAll()
+        guard let searchText = searchController.searchBar.text?.lowercased(), !searchText.isEmpty else {
+            filteredData = weatherListModel
+            cardCollectionView.reloadData()
+            return
+        }
+        // 검색어에 따라 weatherListModel에서 필터링
+        filteredData = weatherListModel.filter { model in
+            return model.cityName.lowercased().contains(searchText)
         }
         cardCollectionView.reloadData()
     }
 }
-
