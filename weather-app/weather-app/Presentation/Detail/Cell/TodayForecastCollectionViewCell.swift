@@ -66,4 +66,3 @@ class TodayForecastCollectionViewCell: UICollectionViewCell {
         self.conditionView.image = UIImage(named: data.conditionIcon)
     }
 }
-

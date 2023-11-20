@@ -25,7 +25,6 @@ class HorizontalContainerCollectionViewCell: UICollectionViewCell {
         setStyle()
         setCollectionViewLayout()
         setCollectionViewConfig()
-    
     }
     
     required init?(coder: NSCoder) {
@@ -80,8 +79,6 @@ class HorizontalContainerCollectionViewCell: UICollectionViewCell {
         }
     }
     
-
-    
     func setCollectionViewLayout() {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -97,10 +94,6 @@ class HorizontalContainerCollectionViewCell: UICollectionViewCell {
         self.horizontalCollectionView.dataSource = self
         
     }
-    
-//    func bindData(data: TodayForecastData) {
-//        self.descriptionLabel.text = data.description
-//    }
 }
 
 extension HorizontalContainerCollectionViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -113,9 +106,7 @@ extension HorizontalContainerCollectionViewCell: UICollectionViewDelegate, UICol
         item.bindData(data: todayDummy[indexPath.row])
         return item
     }
-
 }
-
 
 extension HorizontalContainerCollectionViewCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -125,5 +116,3 @@ extension HorizontalContainerCollectionViewCell: UICollectionViewDelegateFlowLay
         return UIEdgeInsets(top: 80, left: 20, bottom: 10, right: 20)
     }
 }
-
-
