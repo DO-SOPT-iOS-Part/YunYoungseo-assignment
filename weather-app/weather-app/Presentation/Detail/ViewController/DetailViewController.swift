@@ -178,7 +178,7 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
             guard let item = detailCollectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewCell.identifier, for: indexPath) as?
                     DetailCollectionViewCell else { return UICollectionViewCell() }
 //            item.bindData(data: detailDummy)
-            
+  
             return item
             
         case 1:

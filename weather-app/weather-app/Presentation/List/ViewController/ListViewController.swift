@@ -48,7 +48,7 @@ class ListViewController: UIViewController {
 }
 
 private extension ListViewController {
-    
+  
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -169,4 +169,3 @@ extension ListViewController: UISearchResultsUpdating {
         cardCollectionView.reloadData()
     }
 }
-
