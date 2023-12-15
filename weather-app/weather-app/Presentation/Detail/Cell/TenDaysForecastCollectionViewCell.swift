@@ -67,10 +67,7 @@ class TenDaysForecastCollectionViewCell: UICollectionViewCell {
     
     
     private func setStyle() {
-        dayNameLabel.do {
-            $0.font = .sfMedium(size: 22)
-            $0.textColor = .white
-        }
+        dayNameLabel.setupLabel(font: .sfMedium(size: 22), textColor: .white)
         
         conditionStackView.do {
             $0.axis = .vertical
@@ -82,20 +79,11 @@ class TenDaysForecastCollectionViewCell: UICollectionViewCell {
             $0.tintColor = .white
         }
         
-        precipPercentLabel.do {
-            $0.font = .sfMedium(size: 15)
-            $0.textColor = UIColor(red: 0.506, green: 0.812, blue: 0.98, alpha: 1)
-        }
+        precipPercentLabel.setupLabel(font: .sfMedium(size: 15), textColor: UIColor(red: 0.506, green: 0.812, blue: 0.98, alpha: 1))
+
+        minTempLabel.setupLabel(font: .sfMedium(size: 22), textColor: UIColor(red: 1, green: 1, blue: 1, alpha: 1))
         
-        minTempLabel.do {
-            $0.font = .sfMedium(size: 22)
-            $0.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        }
-        
-        maxTempLabel.do {
-            $0.font = .sfMedium(size: 22)
-            $0.textColor =  UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        }
+        maxTempLabel.setupLabel(font: .sfMedium(size: 22), textColor: UIColor(red: 1, green: 1, blue: 1, alpha: 1))
     }
     
     func bindData(data: TenDaysForecastData) {

@@ -43,17 +43,9 @@ class TodayForecastCollectionViewCell: UICollectionViewCell {
             $0.distribution = .equalSpacing
         }
         
-        timeLabel.do {
-            $0.font = .sfMedium(size: 17)
-            $0.textColor = .white
-            $0.textAlignment = .center
-        }
+        timeLabel.setupLabel(font: .sfMedium(size: 17), textColor: .white)
         
-        temperatureLabel.do {
-            $0.font = .sfMedium(size: 17)
-            $0.textColor = .white
-            $0.textAlignment = .center
-        }
+        temperatureLabel.setupLabel(font: .sfMedium(size: 17), textColor: .white)
         
         self.contentView.do {
             $0.backgroundColor = .clear

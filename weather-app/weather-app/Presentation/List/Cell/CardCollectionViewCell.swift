@@ -84,35 +84,12 @@ class CardCollectionViewCell: UICollectionViewCell {
             $0.isUserInteractionEnabled = true
         }
         
-        location.do {
-            $0.font = .sfBold(size: 24)
-            $0.textColor = .white
-        }
-        
-        currentTime.do {
-            $0.font = .sfMedium(size: 17)
-            $0.textColor = .white
-        }
-        
-        currentCondition.do {
-            $0.font = .sfMedium(size: 16)
-            $0.textColor = .white
-        }
-        
-        maxTemperature.do {
-            $0.font = .sfMedium(size: 15)
-            $0.textColor = .white
-        }
-        
-        minTemperature.do {
-            $0.font = .sfMedium(size: 15)
-            $0.textColor = .white
-        }
-        
-        currentTemperature.do {
-            $0.font = .sfLight(size: 52)
-            $0.textColor = .white
-        }
+        location.setupLabel(font: .sfBold(size: 24), textColor: .white)
+        currentTime.setupLabel(font: .sfMedium(size: 17), textColor: .white)
+        currentCondition.setupLabel(font: .sfMedium(size: 16), textColor: .white)
+        maxTemperature.setupLabel(font: .sfMedium(size: 15), textColor: .white)
+        minTemperature.setupLabel(font: .sfMedium(size: 15), textColor: .white)
+        currentTemperature.setupLabel(font: .sfLight(size: 52), textColor: .white)
     }
     
     func configureCell(data: WeatherListModel) {
