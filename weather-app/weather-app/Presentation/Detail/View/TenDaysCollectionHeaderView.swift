@@ -46,10 +46,6 @@ class TenDaysCollectionHeaderView: UICollectionReusableView {
             $0.tintColor = UIColor.lightGray
         }
         
-        headerTextLabel.do {
-            $0.text = "10일간의 일기예보"
-            $0.font = .sfMedium(size: 15)
-            $0.textColor = UIColor.lightGray 
-        }
+        headerTextLabel.setupLabel(font: .sfMedium(size: 15), text:"10일간의 일기예보", textColor: UIColor.lightGray )
     }
 }

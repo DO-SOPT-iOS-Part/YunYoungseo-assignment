@@ -57,20 +57,11 @@ class DetailCollectionViewCell: UICollectionViewCell {
     }
     
     private func setStyle() {
-        locationLabel.do {
-            $0.font = .sfRegular(size: 36)
-            $0.textColor = .white
-        }
+        locationLabel.setupLabel(font: .sfRegular(size: 36), textColor: .white)
         
-        temperatureLabel.do {
-            $0.font = .sfThin(size: 102)
-            $0.textColor = .white
-        }
+        temperatureLabel.setupLabel(font: .sfThin(size: 102), textColor: .white)
         
-        conditionLabel.do {
-            $0.font = .sfRegular(size: 24)
-            $0.textColor = .white
-        }
+        conditionLabel.setupLabel(font: .sfRegular(size: 24), textColor: .white)
         
         temperatureStackView.do {
             $0.axis = .horizontal
@@ -78,15 +69,8 @@ class DetailCollectionViewCell: UICollectionViewCell {
             $0.distribution = .equalSpacing
         }
         
-        minTemperatureLabel.do {
-            $0.font = .sfMedium(size: 20)
-            $0.textColor = .white
-        }
-        
-        maxTemperatureLabel.do {
-            $0.font = .sfMedium(size: 20)
-            $0.textColor = .white
-        }
-        
+        minTemperatureLabel.setupLabel(font: .sfMedium(size: 20), textColor: .white)
+
+        maxTemperatureLabel.setupLabel(font: .sfMedium(size: 20), textColor: .white)
     }
 }
