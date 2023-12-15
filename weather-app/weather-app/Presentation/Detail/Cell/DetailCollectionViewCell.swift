@@ -89,13 +89,4 @@ class DetailCollectionViewCell: UICollectionViewCell {
         }
         
     }
-    
-//    func bindData(data: CardCollectionData) {
-//        self.locationLabel.text = data.location
-//        self.temperatureLabel.text = data.temperature
-//        self.conditionLabel.text = data.condition
-//        self.minTemperatureLabel.text = data.minTemp
-//        self.maxTemperatureLabel.text = data.maxTemp
-//    }
 }
-
